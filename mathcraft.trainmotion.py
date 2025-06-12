@@ -111,14 +111,14 @@ const TrainCalculator = () => {
         </p>
         <h4 className="text-xl font-bold mb-2">Step-by-Step Solution</h4>
         <ol className="list-decimal pl-6 text-gray-700 mb-4">
-          <li><strong>Define Variables:</strong> Let t = time Train B travels. Train A’s time = t + 2</li>
+          <li><strong>Define Variables:</strong> Let t = time Train B travels. Train A's time = t + 2</li>
           <li><strong>Equations:</strong> Train A: 40(t + 2), Train B: 60t</li>
           <li><strong>Set equal:</strong> 40(t + 2) = 60t → 40t + 80 = 60t → 80 = 20t → t = 4</li>
           <li><strong>Conclusion:</strong> Train B catches Train A in 4 hours of its own travel time.</li>
         </ol>
         <h4 className="text-xl font-bold mb-2">General Formula (Same Direction)</h4>
         <p className="font-mono text-gray-800 mb-2">
-          t = (r₁ × h) / (r₂ − r₁)
+          t = (r1 × h) / (r2 − r1)
         </p>
         <h4 className="text-xl font-bold mb-2">Practice Problem</h4>
         <p className="text-gray-700">
