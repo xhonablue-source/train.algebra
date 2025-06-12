@@ -118,12 +118,12 @@ const TrainCalculator = () => {
         </ol>
         <h4 className="text-xl font-bold mb-2">General Formula (Same Direction)</h4>
         <p className="font-mono text-gray-800 mb-2">
-          t = (r1 × h) / (r2 − r1)
+          t = (r1 * h) / (r2 - r1)
         </p>
         <h4 className="text-xl font-bold mb-2">Practice Problem</h4>
         <p className="text-gray-700">
           Train A leaves at 50 mph. Train B leaves 3 hours later at 65 mph. <br/>
-          t = (50 × 3) / (65 − 50) = 150 / 15 = 10 <br/>
+          t = (50 * 3) / (65 - 50) = 150 / 15 = 10 <br/>
           <strong>Answer:</strong> Train B catches Train A after 10 hours of its own travel, or 13 hours after Train A started.
         </p>
       </div>
