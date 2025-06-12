@@ -23,6 +23,22 @@ trainA_speed = st.slider("Train A Speed (mph)", 20, 200, 40)
 trainB_speed = st.slider("Train B Speed (mph)", 30, 300, 60)
 head_start = st.slider("Head Start (hours)", 0.5, 5.0, 2.0, 0.5)
 
+# Additional reflection questions
+st.markdown("🧪 What happens if Train B is slower than Train A?")
+st.markdown("🧠 Can you make it so Train B never catches up?")
+
+# Alternate controls to encourage experimentation
+train_a_speed = st.slider("Train A Speed", 10, 100, 40)
+train_b_speed = st.slider("Train B Speed", 10, 120, 60)
+head_start = st.slider("Train A Head Start (hours)", 0, 5, 2)
+
+# Discovery Challenge
+st.markdown("### 💡 Discovery Challenge:")
+st.write("Try different values. Can you figure out a formula for how long it takes for Train B to catch Train A?")
+
+# General Rule
+st.markdown("🎯 General Rule: Time = Head Start ÷ (Train B Speed – Train A Speed)")
+
 # Calculate meeting time and distances
 def calculate_meeting():
     if scenario == "Same Direction":
@@ -42,6 +58,12 @@ if meeting_time is not None:
     st.success(f"📍 Trains will meet after {meeting_time:.2f} hours.")
 else:
     st.error("Train B is not faster than Train A. They will never meet in the same direction.")
+
+# Hint Button
+if st.button("Need a Hint?"):
+    st.markdown("🔍 Hint 1: Think about how far ahead Train A is.")
+    st.markdown("Hint 2: What is the relative speed if trains move in the same direction?")
+    st.markdown("Hint 3: Time = Distance ÷ Relative Speed")
 
 # Animation section
 if st.button("Start Animation") and meeting_time is not None:
@@ -114,3 +136,9 @@ with st.form("custom_problem"):
             d = custom_r1 * custom_headstart
             t = d / (custom_r1 + custom_r2)
             st.success(f"📍 Trains will meet after {t:.2f} hours (Opposite Direction).")
+
+# Reflection Section
+st.markdown("### 🧠 Reflect On Your Strategy")
+st.text_input("1. What was your plan to solve this?")
+st.text_input("2. Did your solution work? Why or why not?")
+st.text_input("3. What did you try when it didn’t work right away?")
