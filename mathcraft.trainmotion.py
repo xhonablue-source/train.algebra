@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, RotateCcw, Calculator, Train, BookOpen, Zap } from 'lucide-react';
+import { Play, Pause, RotateCcw, Calculator, Zap } from 'lucide-react';
 
-const MathCraftTrainApp = () => {
+const TrainCalculator = () => {
   const [scenario, setScenario] = useState('same-direction');
   const [isAnimating, setIsAnimating] = useState(false);
   const [animationTime, setAnimationTime] = useState(0);
@@ -9,11 +9,8 @@ const MathCraftTrainApp = () => {
   const [trainBSpeed, setTrainBSpeed] = useState(60);
   const [headStart, setHeadStart] = useState(2);
   const [showCalculations, setShowCalculations] = useState(false);
-  const [showMathTutorial, setShowMathTutorial] = useState(true);
-  const [currentStep, setCurrentStep] = useState(0);
   const animationRef = useRef();
 
-  // Calculate meeting time and position
   const calculateMeeting = () => {
     if (scenario === 'same-direction') {
       if (trainBSpeed <= trainASpeed) return null;
@@ -41,7 +38,6 @@ const MathCraftTrainApp = () => {
 
   const meeting = calculateMeeting();
 
-  // Animation logic with smooth sliding
   useEffect(() => {
     if (isAnimating) {
       const startTime = Date.now();
@@ -68,10 +64,8 @@ const MathCraftTrainApp = () => {
   const resetAnimation = () => {
     setIsAnimating(false);
     setAnimationTime(0);
-    setCurrentStep(0);
   };
 
-  // Calculate train positions for smooth animation
   const getTrainPositions = () => {
     const trackWidth = 700;
     const maxDistance = meeting ? Math.max(meeting.distance * 1.3, 300) : 300;
@@ -86,13 +80,13 @@ const MathCraftTrainApp = () => {
       trainBDistance = animationTime > 0 ? trainBSpeed * animationTime : 0;
     }
     
-    const trainAPos = Math.min((trainADistance / maxDistance) * trackWidth, trackWidth - 60);
+    const trainAPos = Math.min((trainADistance / maxDistance) * trackWidth, trackWidth - 100);
     let trainBPos;
     
     if (scenario === 'same-direction') {
-      trainBPos = Math.min((trainBDistance / maxDistance) * trackWidth, trackWidth - 60);
+      trainBPos = Math.min((trainBDistance / maxDistance) * trackWidth, trackWidth - 100);
     } else {
-      trainBPos = Math.max(trackWidth - 60 - (trainBDistance / maxDistance) * trackWidth, 0);
+      trainBPos = Math.max(trackWidth - 100 - (trainBDistance / maxDistance) * trackWidth, 0);
     }
     
     return { trainAPos, trainBPos, maxDistance, trainADistance, trainBDistance };
@@ -100,109 +94,214 @@ const MathCraftTrainApp = () => {
 
   const { trainAPos, trainBPos, maxDistance, trainADistance, trainBDistance } = getTrainPositions();
 
-  // Math tutorial steps
-  const getMathSteps = () => {
-    if (scenario === 'same-direction') {
-      return [
-        {
-          title: "Problem Setup",
-          content: `Train A: ${trainASpeed} mph, ${headStart} hour head start\nTrain B: ${trainBSpeed} mph, starts later`,
-          visual: "Both trains move in same direction →"
-        },
-        {
-          title: "Key Insight",
-          content: `Since both move same direction, we use RELATIVE SPEED\nRelative Speed = Faster Speed - Slower Speed = ${trainBSpeed} - ${trainASpeed} = ${trainBSpeed - trainASpeed} mph`,
-          visual: "Train B gains on Train A at " + (trainBSpeed - trainASpeed) + " mph"
-        },
-        {
-          title: "Initial Gap",
-          content: `Train A's head start creates initial gap:\nGap = Speed × Time = ${trainASpeed} × ${headStart} = ${trainASpeed * headStart} miles`,
-          visual: "Train A is " + (trainASpeed * headStart) + " miles ahead when B starts"
-        },
-        {
-          title: "Time to Close Gap",
-          content: `Time = Distance ÷ Speed\nTime = ${trainASpeed * headStart} ÷ ${trainBSpeed - trainASpeed} = ${meeting?.time.toFixed(2)} hours`,
-          visual: "Train B needs " + meeting?.time.toFixed(2) + " hours to catch up"
-        }
-      ];
-    } else {
-      return [
-        {
-          title: "Problem Setup",
-          content: `Train A: ${trainASpeed} mph, ${headStart} hour head start →\nTrain B: ${trainBSpeed} mph, moves toward A ←`,
-          visual: "Trains move toward each other"
-        },
-        {
-          title: "Key Insight",
-          content: `Moving toward each other = ADD SPEEDS\nCombined Speed = ${trainASpeed} + ${trainBSpeed} = ${trainASpeed + trainBSpeed} mph`,
-          visual: "They approach at " + (trainASpeed + trainBSpeed) + " mph combined"
-        },
-        {
-          title: "Initial Separation",
-          content: `When B starts, they are separated by:\nSeparation = ${trainASpeed} × ${headStart} = ${trainASpeed * headStart} miles`,
-          visual: "Initial gap: " + (trainASpeed * headStart) + " miles"
-        },
-        {
-          title: "Time to Meet",
-          content: `Time = Distance ÷ Combined Speed\nTime = ${trainASpeed * headStart} ÷ ${trainASpeed + trainBSpeed} = ${meeting?.time.toFixed(2)} hours`,
-          visual: "They meet in " + meeting?.time.toFixed(2) + " hours"
-        }
-      ];
-    }
+  // Jet-Powered Super Train Component
+  const JetSuperTrain = ({ type, direction, speed, distance, label, isActive, onClick, scenario }) => {
+    const isHyperloop = type === 'hyperloop';
+    const isReversed = direction === 'left';
+    
+    return (
+      <div 
+        className={`relative cursor-pointer transform transition-all duration-500 hover:scale-110 ${
+          isActive ? 'scale-105 drop-shadow-2xl' : 'hover:scale-105'
+        }`}
+        onClick={onClick}
+      >
+        {/* Glow effect when active */}
+        {isActive && (
+          <div className={`absolute inset-0 rounded-2xl blur-xl opacity-75 ${
+            isHyperloop ? 'bg-blue-400' : 'bg-purple-400'
+          }`}></div>
+        )}
+        
+        <div className={`relative flex items-center ${isReversed ? 'flex-row-reverse' : ''} p-6 rounded-2xl border-4 transition-all duration-300 ${
+          isActive 
+            ? (isHyperloop ? 'border-blue-400 bg-blue-50 shadow-2xl' : 'border-purple-400 bg-purple-50 shadow-2xl')
+            : 'border-gray-300 bg-white hover:border-gray-400'
+        }`}>
+          
+          {/* Super Train Body */}
+          <div className="relative group">
+            <div className={`relative w-32 h-16 rounded-xl shadow-lg border-2 transition-all duration-300 ${
+              isHyperloop 
+                ? 'bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300 border-blue-400' 
+                : 'bg-gradient-to-r from-purple-100 via-purple-200 to-purple-300 border-purple-400'
+            }`}>
+              
+              {/* Futuristic nose cone */}
+              <div className={`absolute ${isReversed ? 'right-full' : 'left-full'} top-1/2 transform -translate-y-1/2`}>
+                <div className={`w-0 h-0 ${
+                  isReversed 
+                    ? `border-r-12 ${isHyperloop ? 'border-r-blue-200' : 'border-r-purple-200'} border-t-8 border-b-8 border-t-transparent border-b-transparent`
+                    : `border-l-12 ${isHyperloop ? 'border-l-blue-200' : 'border-l-purple-200'} border-t-8 border-b-8 border-t-transparent border-b-transparent`
+                }`}></div>
+              </div>
+              
+              {/* Train Label */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className={`font-bold text-2xl ${
+                  isHyperloop ? 'text-blue-800' : 'text-purple-800'
+                }`}>
+                  {label}
+                </span>
+              </div>
+              
+              {/* Futuristic windows */}
+              <div className="absolute top-3 left-4 right-4 flex justify-between">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className={`w-4 h-3 rounded-full ${
+                    isHyperloop ? 'bg-blue-300' : 'bg-purple-300'
+                  }`}></div>
+                ))}
+              </div>
+              
+              {/* Jet exhaust when moving */}
+              {(speed > 0 || isActive) && (
+                <div className={`absolute ${isReversed ? 'right-full mr-2' : 'left-full ml-2'} top-1/2 transform -translate-y-1/2`}>
+                  <div className="flex flex-col space-y-1">
+                    <div className="h-1 w-12 bg-orange-400 animate-pulse rounded-full"></div>
+                    <div className="h-1 w-10 bg-yellow-400 animate-pulse rounded-full"></div>
+                    <div className="h-1 w-8 bg-red-400 animate-pulse rounded-full"></div>
+                  </div>
+                  {/* Jet flame effect */}
+                  <div className={`absolute top-1/2 transform -translate-y-1/2 ${isReversed ? 'right-0' : 'left-0'}`}>
+                    <div className="text-2xl animate-bounce">🔥</div>
+                  </div>
+                </div>
+              )}
+              
+              {/* Magnetic levitation indicators */}
+              <div className="absolute -bottom-2 left-4 right-4 flex justify-between">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="w-6 h-2 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full animate-pulse"></div>
+                ))}
+              </div>
+              
+              {/* Energy field */}
+              <div className={`absolute inset-0 rounded-xl opacity-30 ${
+                isHyperloop ? 'bg-blue-400' : 'bg-purple-400'
+              } animate-pulse`}></div>
+            </div>
+            
+            {/* Scenario label */}
+            <div className="text-center mt-3">
+              <div className={`font-bold text-lg ${isHyperloop ? 'text-blue-800' : 'text-purple-800'}`}>
+                {scenario === 'same-direction' ? '同方向 Same Direction' : '逆方向 Opposite Directions'}
+              </div>
+              <div className="text-sm text-gray-600">
+                {scenario === 'same-direction' ? '→ → (Subtract speeds)' : '→ ← (Add speeds)'}
+              </div>
+              {scenario === 'opposite-direction' && (
+                <div className="mt-2 text-xs text-purple-600 italic">
+                  💡 Fun Fact: Moving toward each other = ADD speeds!
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   };
 
-  const mathSteps = getMathSteps();
+  // Regular animated train for the track
+  const AnimatedTrain = ({ type, direction, speed, distance, label }) => {
+    const isHyperloop = type === 'hyperloop';
+    const isReversed = direction === 'left';
+    
+    return (
+      <div className={`flex items-center ${isReversed ? 'flex-row-reverse' : ''}`}>
+        <div className="relative">
+          {/* Train Body */}
+          <div className={`relative w-24 h-12 rounded-lg shadow-lg border-2 transition-all duration-300 ${
+            isHyperloop 
+              ? 'bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 border-blue-700' 
+              : 'bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 border-purple-700'
+          }`}>
+            
+            {/* Nose cone */}
+            <div className={`absolute ${isReversed ? 'right-full' : 'left-full'} top-1/2 transform -translate-y-1/2`}>
+              <div className={`w-0 h-0 ${
+                isReversed 
+                  ? `border-r-8 ${isHyperloop ? 'border-r-blue-500' : 'border-r-purple-500'} border-t-6 border-b-6 border-t-transparent border-b-transparent`
+                  : `border-l-8 ${isHyperloop ? 'border-l-blue-500' : 'border-l-purple-500'} border-t-6 border-b-6 border-t-transparent border-b-transparent`
+              }`}></div>
+            </div>
+            
+            {/* Label */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="font-bold text-lg text-white">{label}</span>
+            </div>
+            
+            {/* Jet exhaust */}
+            {speed > 0 && (
+              <div className={`absolute ${isReversed ? 'right-full mr-1' : 'left-full ml-1'} top-1/2 transform -translate-y-1/2`}>
+                <div className="flex flex-col space-y-0.5">
+                  <div className="h-0.5 w-8 bg-orange-400 animate-pulse"></div>
+                  <div className="h-0.5 w-6 bg-yellow-400 animate-pulse"></div>
+                  <div className="h-0.5 w-4 bg-red-400 animate-pulse"></div>
+                </div>
+              </div>
+            )}
+            
+            {/* Magnetic levitation */}
+            <div className="absolute -bottom-1 left-2 right-2 flex justify-between">
+              <div className="w-3 h-1 bg-cyan-400 rounded-full animate-pulse"></div>
+              <div className="w-3 h-1 bg-cyan-400 rounded-full animate-pulse"></div>
+            </div>
+          </div>
+          
+          {/* Info Panel */}
+          <div className={`${isReversed ? 'mr-3' : 'ml-3'} bg-white p-2 rounded-lg shadow-md border`}>
+            <div className={`font-bold text-sm ${isHyperloop ? 'text-blue-600' : 'text-purple-600'}`}>
+              {isHyperloop ? '🚀 Hyperloop' : '⚡ Maglev'}
+            </div>
+            <div className="text-xs text-gray-600">{speed} mph</div>
+            <div className="text-xs text-gray-500">{distance.toFixed(1)} mi</div>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-4">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3 flex items-center justify-center gap-3">
-            <Train className="text-blue-600" size={48} />
-            MathCraft: Interactive Train Motion
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-3">
+            🚀 MathCraft: Jet-Powered Super Train Motion
           </h1>
-          <p className="text-xl text-gray-600">Master relative motion with visual mathematics</p>
+          <p className="text-xl text-gray-600">Future Transportation Mathematics | ハイパーループ数学</p>
         </div>
 
-        {/* Scenario Toggle */}
-        <div className="bg-white rounded-xl shadow-xl p-6 mb-6 border border-gray-100">
-          <h2 className="text-2xl font-bold mb-4 text-gray-800">Choose Your Scenario</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <label className={`flex items-center space-x-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
-              scenario === 'same-direction' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'
-            }`}>
-              <input
-                type="radio"
-                name="scenario"
-                value="same-direction"
-                checked={scenario === 'same-direction'}
-                onChange={(e) => setScenario(e.target.value)}
-                className="text-blue-600 scale-125"
-              />
-              <div>
-                <div className="font-semibold text-lg">Same Direction</div>
-                <div className="text-gray-600">Faster train catches slower train</div>
-                <div className="text-sm text-blue-600">→ → (Subtract speeds)</div>
-              </div>
-            </label>
-            <label className={`flex items-center space-x-3 p-4 rounded-lg border-2 cursor-pointer transition-all ${
-              scenario === 'opposite-direction' ? 'border-purple-500 bg-purple-50' : 'border-gray-200 hover:border-purple-300'
-            }`}>
-              <input
-                type="radio"
-                name="scenario"
-                value="opposite-direction"
-                checked={scenario === 'opposite-direction'}
-                onChange={(e) => setScenario(e.target.value)}
-                className="text-purple-600 scale-125"
-              />
-              <div>
-                <div className="font-semibold text-lg">Opposite Directions</div>
-                <div className="text-gray-600">Trains move toward each other</div>
-                <div className="text-sm text-purple-600">→ ← (Add speeds)</div>
-              </div>
-            </label>
+        {/* Interactive Train Toggle Buttons */}
+        <div className="bg-white rounded-2xl shadow-2xl p-8 mb-8 border border-gray-200">
+          <h2 className="text-3xl font-bold mb-8 text-gray-800 text-center">
+            🛸 Click the Super Trains to Choose Your Scenario!
+          </h2>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* Same Direction - Hyperloop Toggle */}
+            <JetSuperTrain
+              type="hyperloop"
+              direction="right"
+              speed={trainBSpeed}
+              distance={0}
+              label="SAME ↗"
+              isActive={scenario === 'same-direction'}
+              onClick={() => setScenario('same-direction')}
+              scenario="same-direction"
+            />
+
+            {/* Opposite Direction - Maglev Toggle */}
+            <JetSuperTrain
+              type="maglev"
+              direction="left"
+              speed={trainASpeed}
+              distance={0}
+              label="OPPOSITE ↔"
+              isActive={scenario === 'opposite-direction'}
+              onClick={() => setScenario('opposite-direction')}
+              scenario="opposite-direction"
+            />
           </div>
         </div>
 
@@ -210,294 +309,210 @@ const MathCraftTrainApp = () => {
         <div className="bg-white rounded-xl shadow-xl p-6 mb-6 border border-gray-100">
           <h2 className="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-2">
             <Zap className="text-yellow-500" />
-            Train Parameters
+            🚀 Super Train Parameters
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="space-y-2">
-              <label className="block text-sm font-bold text-red-600 mb-2">
-                🚂 Train A Speed: {trainASpeed} mph
-              </label>
-              <input
-                type="range"
-                min="10"
-                max="100"
-                value={trainASpeed}
-                onChange={(e) => setTrainASpeed(Number(e.target.value))}
-                className="w-full h-3 bg-red-200 rounded-lg appearance-none cursor-pointer"
-              />
-              <input
-                type="number"
-                value={trainASpeed}
-                onChange={(e) => setTrainASpeed(Number(e.target.value))}
-                className="w-full px-3 py-2 border-2 border-red-300 rounded-lg focus:border-red-500 focus:outline-none"
-                min="1"
-                max="150"
-              />
-            </div>
-            <div className="space-y-2">
+            <div className="space-y-3">
               <label className="block text-sm font-bold text-blue-600 mb-2">
-                🚂 Train B Speed: {trainBSpeed} mph
+                🚀 Hyperloop A Speed: {trainASpeed} mph
+                <br />
+                <span className="text-xs text-gray-500">磁気浮上式 (Magnetic Levitation)</span>
               </label>
               <input
                 type="range"
-                min="10"
-                max="100"
-                value={trainBSpeed}
-                onChange={(e) => setTrainBSpeed(Number(e.target.value))}
+                min="100"
+                max="500"
+                value={trainASpeed}
+                onChange={(e) => setTrainASpeed(Number(e.target.value))}
                 className="w-full h-3 bg-blue-200 rounded-lg appearance-none cursor-pointer"
               />
               <input
                 type="number"
-                value={trainBSpeed}
-                onChange={(e) => setTrainBSpeed(Number(e.target.value))}
-                className="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:border-blue-500 focus:outline-none"
-                min="1"
-                max="150"
+                value={trainASpeed}
+                onChange={(e) => setTrainASpeed(Number(e.target.value))}
+                className="w-full px-4 py-3 border-2 border-blue-300 rounded-lg focus:border-blue-500 focus:outline-none text-lg"
+                min="100"
+                max="700"
               />
             </div>
-            <div className="space-y-2">
-              <label className="block text-sm font-bold text-green-600 mb-2">
+            <div className="space-y-3">
+              <label className="block text-sm font-bold text-purple-600 mb-2">
+                ⚡ Maglev B Speed: {trainBSpeed} mph
+                <br />
+                <span className="text-xs text-gray-500">ジェット推進 (Jet Propulsion)</span>
+              </label>
+              <input
+                type="range"
+                min="200"
+                max="800"
+                value={trainBSpeed}
+                onChange={(e) => setTrainBSpeed(Number(e.target.value))}
+                className="w-full h-3 bg-purple-200 rounded-lg appearance-none cursor-pointer"
+              />
+              <input
+                type="number"
+                value={trainBSpeed}
+                onChange={(e) => setTrainBSpeed(Number(e.target.value))}
+                className="w-full px-4 py-3 border-2 border-purple-300 rounded-lg focus:border-purple-500 focus:outline-none text-lg"
+                min="200"
+                max="1000"
+              />
+            </div>
+            <div className="space-y-3">
+              <label className="block text-sm font-bold text-pink-600 mb-2">
                 ⏰ Head Start: {headStart} hours
+                <br />
+                <span className="text-xs text-gray-500">先発時間 (Launch Delay)</span>
               </label>
               <input
                 type="range"
                 min="0.5"
-                max="10"
+                max="5"
                 step="0.5"
                 value={headStart}
                 onChange={(e) => setHeadStart(Number(e.target.value))}
-                className="w-full h-3 bg-green-200 rounded-lg appearance-none cursor-pointer"
+                className="w-full h-3 bg-pink-200 rounded-lg appearance-none cursor-pointer"
               />
               <input
                 type="number"
                 value={headStart}
                 onChange={(e) => setHeadStart(Number(e.target.value))}
-                className="w-full px-3 py-2 border-2 border-green-300 rounded-lg focus:border-green-500 focus:outline-none"
+                className="w-full px-4 py-3 border-2 border-pink-300 rounded-lg focus:border-pink-500 focus:outline-none text-lg"
                 min="0"
-                max="20"
+                max="10"
                 step="0.5"
               />
             </div>
           </div>
         </div>
 
-        {/* Math Tutorial Section */}
-        {showMathTutorial && (
-          <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl shadow-xl p-6 mb-6 border-2 border-yellow-200">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold text-orange-800 flex items-center gap-2">
-                <BookOpen className="text-orange-600" />
-                Visual Math Tutorial
-              </h2>
-              <button
-                onClick={() => setShowMathTutorial(!showMathTutorial)}
-                className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
-              >
-                Hide Tutorial
-              </button>
-            </div>
-            
-            {meeting && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  {mathSteps.map((step, index) => (
-                    <div
-                      key={index}
-                      className={`p-4 rounded-lg border-2 transition-all cursor-pointer ${
-                        currentStep === index 
-                          ? 'border-orange-400 bg-orange-100' 
-                          : 'border-orange-200 bg-white hover:border-orange-300'
-                      }`}
-                      onClick={() => setCurrentStep(index)}
-                    >
-                      <h3 className="font-bold text-lg text-orange-800">
-                        Step {index + 1}: {step.title}
-                      </h3>
-                      <p className="text-gray-700 whitespace-pre-line text-sm mt-2">
-                        {step.content}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-                
-                <div className="bg-white p-6 rounded-lg border-2 border-orange-200">
-                  <h3 className="font-bold text-xl text-orange-800 mb-4">
-                    {mathSteps[currentStep]?.title}
-                  </h3>
-                  <div className="text-6xl text-center mb-4">
-                    {scenario === 'same-direction' ? '🚂→  🚂→' : '🚂→  ←🚂'}
-                  </div>
-                  <div className="text-center text-lg font-medium text-gray-700 bg-orange-50 p-4 rounded-lg">
-                    {mathSteps[currentStep]?.visual}
-                  </div>
-                  
-                  {/* Real-time values */}
-                  <div className="mt-4 space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span>Train A Distance:</span>
-                      <span className="font-mono">{trainADistance.toFixed(1)} mi</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Train B Distance:</span>
-                      <span className="font-mono">{trainBDistance.toFixed(1)} mi</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Time Elapsed:</span>
-                      <span className="font-mono">{animationTime.toFixed(1)} hrs</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Animation Controls */}
+        {/* Animation */}
         <div className="bg-white rounded-xl shadow-xl p-6 mb-6 border border-gray-100">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-800">🎬 Live Animation</h2>
+            <h2 className="text-2xl font-bold text-gray-800">🎬 Live Super Train Animation</h2>
             <div className="flex gap-3">
               <button
                 onClick={() => setIsAnimating(!isAnimating)}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg"
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-700 text-white rounded-lg hover:from-blue-700 hover:to-purple-800 transition-all shadow-lg text-lg"
               >
-                {isAnimating ? <Pause size={20} /> : <Play size={20} />}
-                {isAnimating ? 'Pause' : 'Play'}
+                {isAnimating ? <Pause size={24} /> : <Play size={24} />}
+                {isAnimating ? '🛑 Stop' : '🚀 Launch'}
               </button>
               <button
                 onClick={resetAnimation}
-                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-lg hover:from-gray-700 hover:to-gray-800 transition-all shadow-lg"
+                className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-lg hover:from-gray-700 hover:to-gray-800 transition-all shadow-lg text-lg"
               >
-                <RotateCcw size={20} />
-                Reset
+                <RotateCcw size={24} />
+                🔄 Reset
               </button>
             </div>
           </div>
 
-          {/* Enhanced Track Visualization */}
-          <div className="relative bg-gradient-to-b from-green-100 to-green-200 p-8 rounded-xl border-2 border-green-300">
+          <div className="relative bg-gradient-to-b from-gray-100 to-gray-200 p-8 rounded-xl border-2 border-gray-300">
             <div className="relative">
-              {/* Enhanced Track with realistic appearance */}
-              <div className="relative w-full h-8 mb-12">
-                {/* Track bed */}
-                <div className="w-full h-6 bg-gray-600 rounded-lg"></div>
-                {/* Rails */}
-                <div className="absolute top-1 left-0 w-full h-1 bg-gray-800 rounded-full"></div>
-                <div className="absolute bottom-1 left-0 w-full h-1 bg-gray-800 rounded-full"></div>
-                {/* Railroad ties */}
+              {/* Futuristic Track */}
+              <div className="relative w-full h-8 mb-16">
+                <div className="w-full h-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-lg"></div>
+                <div className="absolute top-1 left-0 w-full h-1 bg-cyan-400 rounded-full animate-pulse"></div>
+                <div className="absolute bottom-1 left-0 w-full h-1 bg-pink-400 rounded-full animate-pulse"></div>
+                {/* Energy nodes */}
                 {[...Array(15)].map((_, i) => (
                   <div
                     key={i}
-                    className="absolute top-0 w-2 h-6 bg-amber-800"
+                    className="absolute top-0 w-2 h-6 bg-yellow-400 animate-pulse"
                     style={{ left: `${i * 6.67}%` }}
                   />
                 ))}
               </div>
 
               {/* Distance markers */}
-              <div className="flex justify-between text-sm text-gray-700 mb-6 font-mono">
+              <div className="flex justify-between text-sm text-gray-700 mb-8 font-mono">
                 {[...Array(8)].map((_, i) => (
                   <div key={i} className="text-center">
                     <div className="w-px h-4 bg-gray-400 mx-auto mb-1"></div>
-                    <span>{Math.round((i * maxDistance) / 7)} mi</span>
+                    <span className="block">{Math.round((i * maxDistance) / 7)} mi</span>
+                    <span className="text-xs text-blue-600">
+                      {i === 0 ? '🚀 Launch' : i === 7 ? '🏁 Finish' : `Station ${i}`}
+                    </span>
                   </div>
                 ))}
               </div>
 
-              {/* Enhanced Trains with sliding animation */}
-              <div className="relative h-24">
-                {/* Train A with smooth sliding */}
+              {/* Animated Super Trains */}
+              <div className="relative h-32">
+                {/* Train A */}
                 <div
-                  className="absolute transition-all duration-100 ease-linear transform -translate-y-16"
+                  className="absolute transition-all duration-100 ease-linear"
                   style={{ 
                     left: `${trainAPos}px`,
-                    transform: `translateX(${trainAPos}px) translateY(-64px)`
+                    top: '-80px'
                   }}
                 >
-                  <div className="flex items-center">
-                    <div className="relative">
-                      {/* Train body */}
-                      <div className="w-16 h-10 bg-gradient-to-r from-red-500 to-red-600 rounded-lg shadow-lg flex items-center justify-center border-2 border-red-700">
-                        <span className="text-white font-bold text-lg">A</span>
-                      </div>
-                      {/* Smoke effect */}
-                      <div className="absolute -top-2 left-2 text-gray-400 animate-pulse">💨</div>
-                      {/* Wheels */}
-                      <div className="absolute -bottom-1 left-1 w-3 h-3 bg-gray-800 rounded-full"></div>
-                      <div className="absolute -bottom-1 right-1 w-3 h-3 bg-gray-800 rounded-full"></div>
-                    </div>
-                    <div className="ml-3 bg-white p-2 rounded-lg shadow-md">
-                      <div className="font-bold text-red-600">Train A</div>
-                      <div className="text-sm text-gray-600">{trainASpeed} mph</div>
-                      <div className="text-xs text-gray-500">{trainADistance.toFixed(1)} mi</div>
-                    </div>
-                  </div>
+                  <AnimatedTrain 
+                    type="hyperloop" 
+                    direction="right" 
+                    speed={trainASpeed} 
+                    distance={trainADistance} 
+                    label="A"
+                  />
                 </div>
 
-                {/* Train B with smooth sliding */}
+                {/* Train B */}
                 <div
-                  className="absolute transition-all duration-100 ease-linear transform translate-y-6"
+                  className="absolute transition-all duration-100 ease-linear"
                   style={{ 
                     left: `${trainBPos}px`,
-                    transform: scenario === 'opposite-direction' 
-                      ? `translateX(${trainBPos}px) translateY(24px) scaleX(-1)` 
-                      : `translateX(${trainBPos}px) translateY(24px)`
+                    top: '40px'
                   }}
                 >
-                  <div className="flex items-center">
-                    <div className="relative">
-                      {/* Train body */}
-                      <div className="w-16 h-10 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-lg flex items-center justify-center border-2 border-blue-700">
-                        <span className="text-white font-bold text-lg">B</span>
-                      </div>
-                      {/* Smoke effect */}
-                      <div className="absolute -top-2 left-2 text-gray-400 animate-pulse">💨</div>
-                      {/* Wheels */}
-                      <div className="absolute -bottom-1 left-1 w-3 h-3 bg-gray-800 rounded-full"></div>
-                      <div className="absolute -bottom-1 right-1 w-3 h-3 bg-gray-800 rounded-full"></div>
-                    </div>
-                    <div className={`ml-3 bg-white p-2 rounded-lg shadow-md ${scenario === 'opposite-direction' ? 'scale-x-[-1]' : ''}`}>
-                      <div className="font-bold text-blue-600">Train B</div>
-                      <div className="text-sm text-gray-600">{trainBSpeed} mph</div>
-                      <div className="text-xs text-gray-500">{trainBDistance.toFixed(1)} mi</div>
-                    </div>
-                  </div>
+                  <AnimatedTrain 
+                    type="maglev" 
+                    direction={scenario === 'opposite-direction' ? 'left' : 'right'} 
+                    speed={trainBSpeed} 
+                    distance={trainBDistance} 
+                    label="B"
+                  />
                 </div>
 
-                {/* Meeting point indicator with animation */}
+                {/* Meeting point */}
                 {meeting && (
                   <div
-                    className="absolute top-0 w-2 h-24 bg-gradient-to-b from-green-400 to-green-600 animate-pulse"
+                    className="absolute top-0 w-4 h-32 bg-gradient-to-b from-green-400 to-emerald-600 animate-pulse rounded-full"
                     style={{ left: `${(meeting.distance / maxDistance) * 700}px` }}
                   >
-                    <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
-                      🎯 MEET
+                    <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                      ⚡ COLLISION POINT
                     </div>
-                    <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs bg-white px-2 py-1 rounded border">
-                      {meeting.distance.toFixed(1)}mi
+                    <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-xs bg-white px-3 py-1 rounded border shadow">
+                      {meeting.distance.toFixed(1)} mi
                     </div>
                   </div>
                 )}
               </div>
 
-              {/* Enhanced Time display with calculations */}
-              <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                <div className="bg-white p-4 rounded-lg shadow-md">
-                  <div className="text-2xl font-bold text-blue-600">{animationTime.toFixed(1)}h</div>
-                  <div className="text-sm text-gray-600">Elapsed Time</div>
+              {/* Enhanced time display */}
+              <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+                  <div className="text-3xl font-bold text-blue-600">{animationTime.toFixed(1)}h</div>
+                  <div className="text-sm text-gray-600">⏱️ Elapsed Time</div>
+                  <div className="text-xs text-blue-500 mt-1">{(animationTime * 60).toFixed(0)} minutes</div>
                 </div>
                 {meeting && (
                   <>
-                    <div className="bg-white p-4 rounded-lg shadow-md">
-                      <div className="text-2xl font-bold text-green-600">{meeting.time.toFixed(1)}h</div>
-                      <div className="text-sm text-gray-600">Meeting Time</div>
+                    <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+                      <div className="text-3xl font-bold text-green-600">{meeting.time.toFixed(1)}h</div>
+                      <div className="text-sm text-gray-600">🎯 Meeting Time</div>
+                      <div className="text-xs text-green-500 mt-1">{(meeting.time * 60).toFixed(0)} minutes</div>
                     </div>
-                    <div className="bg-white p-4 rounded-lg shadow-md">
-                      <div className="text-2xl font-bold text-purple-600">
+                    <div className="bg-white p-6 rounded-lg shadow-md border-l-4 border-purple-500">
+                      <div className="text-3xl font-bold text-purple-600">
                         {scenario === 'same-direction' ? trainBSpeed - trainASpeed : trainASpeed + trainBSpeed}
                       </div>
                       <div className="text-sm text-gray-600">
-                        {scenario === 'same-direction' ? 'Relative Speed (mph)' : 'Combined Speed (mph)'}
+                        {scenario === 'same-direction' ? '🔄 Relative Speed' : '⚡ Combined Speed'} (mph)
+                      </div>
+                      <div className="text-xs text-purple-500 mt-1">
+                        {scenario === 'same-direction' ? 'Catching Speed' : 'Approach Speed'}
                       </div>
                     </div>
                   </>
@@ -507,32 +522,36 @@ const MathCraftTrainApp = () => {
           </div>
         </div>
 
-        {/* Calculator Toggle */}
+        {/* Calculator */}
         <div className="bg-white rounded-xl shadow-xl p-6 border border-gray-100">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
               <Calculator className="text-indigo-600" />
-              Complete Mathematical Solution
+              🧮 Mathematical Solution
             </h2>
             <button
               onClick={() => setShowCalculations(!showCalculations)}
-              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white rounded-lg hover:from-indigo-700 hover:to-indigo-800 transition-all shadow-lg"
+              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-700 text-white rounded-lg hover:from-indigo-700 hover:to-purple-800 transition-all shadow-lg text-lg"
             >
               <Calculator size={20} />
-              {showCalculations ? 'Hide' : 'Show'} Full Calculations
+              {showCalculations ? '🙈 Hide' : '🤓 Show'} Calculations
             </button>
           </div>
 
           {showCalculations && meeting && (
             <div className="space-y-6">
               <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-6 rounded-xl border-2 border-gray-200">
-                <h3 className="font-bold text-xl mb-4 text-gray-800">📋 Problem Setup:</h3>
+                <h3 className="font-bold text-xl mb-4 text-gray-800">📋 Super Train Problem Setup:</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-lg">
-                  <div className="bg-red-50 p-4 rounded-lg border-l-4 border-red-500">
-                    <strong>🚂 Train A:</strong> {trainASpeed} mph, {headStart}-hour head start
-                  </div>
                   <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
-                    <strong>🚂 Train B:</strong> {trainBSpeed} mph, {scenario === 'same-direction' ? 'same direction' : 'opposite direction'}
+                    <strong>🚀 Hyperloop A:</strong> {trainASpeed} mph, {headStart}-hour head start
+                    <br />
+                    <span className="text-sm text-gray-600">Magnetic levitation technology</span>
+                  </div>
+                  <div className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500">
+                    <strong>⚡ Maglev B:</strong> {trainBSpeed} mph, {scenario === 'same-direction' ? 'same direction' : 'opposite direction'}
+                    <br />
+                    <span className="text-sm text-gray-600">Jet propulsion system</span>
                   </div>
                 </div>
               </div>
@@ -542,13 +561,13 @@ const MathCraftTrainApp = () => {
                   <h3 className="font-bold text-xl mb-4 text-blue-800">🎯 Same Direction Solution:</h3>
                   <div className="space-y-4">
                     <div className="bg-white p-4 rounded-lg shadow-sm">
-                      <p className="text-lg"><strong>Step 1:</strong> Let t = time Train B travels</p>
+                      <p className="text-lg"><strong>Step 1:</strong> Let t = time Maglev B travels</p>
                     </div>
                     <div className="bg-white p-4 rounded-lg shadow-sm">
-                      <p className="text-lg"><strong>Step 2:</strong> Set up distance equations:</p>
-                      <div className="ml-4 mt-2 font-mono text-blue-700">
-                        <p>Train A distance = {trainASpeed}(t + {headStart})</p>
-                        <p>Train B distance = {trainBSpeed}t</p>
+                      <p className="text-lg"><strong>Step 2:</strong> Distance equations:</p>
+                      <div className="ml-4 mt-2 font-mono text-blue-700 text-lg">
+                        <p>Hyperloop A: {trainASpeed}(t + {headStart}) miles</p>
+                        <p>Maglev B: {trainBSpeed}t miles</p>
                       </div>
                     </div>
                     <div className="bg-white p-4 rounded-lg shadow-sm">
@@ -558,166 +577,4 @@ const MathCraftTrainApp = () => {
                       </div>
                     </div>
                     <div className="bg-white p-4 rounded-lg shadow-sm">
-                      <p className="text-lg"><strong>Step 4:</strong> Solve for t:</p>
-                      <div className="ml-4 mt-2 font-mono text-blue-700">
-                        <p>{trainASpeed}t + {trainASpeed * headStart} = {trainBSpeed}t</p>
-                        <p>{trainASpeed * headStart} = {trainBSpeed - trainASpeed}t</p>
-                        <p className="text-xl font-bold">t = {meeting.time.toFixed(2)} hours</p>
-                      </div>
-                    </div>
-                    <div className="bg-green-100 p-4 rounded-lg border-2 border-green-300">
-                      <p className="text-lg font-bold text-green-800">
-                        ✅ Answer: Train B catches Train A after <span className="text-2xl">{meeting.time.toFixed(1)} hours</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl border-2 border-purple-200">
-                  <h3 className="font-bold text-xl mb-4 text-purple-800">🎯 Opposite Direction Solution:</h3>
-                  <div className="space-y-4">
-                    <div className="bg-white p-4 rounded-lg shadow-sm">
-                      <p className="text-lg"><strong>Step 1:</strong> Initial separation = {trainASpeed} × {headStart} = {trainASpeed * headStart} miles</p>
-                    </div>
-                    <div className="bg-white p-4 rounded-lg shadow-sm">
-                      <p className="text-lg"><strong>Step 2:</strong> Combined approach speed = {trainASpeed} + {train
-
-BSpeed} = {trainASpeed + trainBSpeed} mph</p>
-                   </div>
-                   <div className="bg-white p-4 rounded-lg shadow-sm">
-                     <p className="text-lg"><strong>Step 3:</strong> Meeting time calculation:</p>
-                     <div className="ml-4 mt-2 font-mono text-purple-700">
-                       <p>Time = Distance ÷ Combined Speed</p>
-                       <p>Time = {trainASpeed * headStart} ÷ {trainASpeed + trainBSpeed}</p>
-                       <p className="text-xl font-bold">Time = {meeting.time.toFixed(2)} hours</p>
-                     </div>
-                   </div>
-                   <div className="bg-green-100 p-4 rounded-lg border-2 border-green-300">
-                     <p className="text-lg font-bold text-green-800">
-                       ✅ Answer: Trains meet after <span className="text-2xl">{meeting.time.toFixed(1)} hours</span>
-                     </p>
-                     <p className="text-green-700">Meeting distance: {meeting.distance.toFixed(1)} miles from Train A's start</p>
-                   </div>
-                 </div>
-               </div>
-             )}
-
-             {/* General Formula Section */}
-             <div className="bg-gradient-to-r from-yellow-50 to-amber-50 p-6 rounded-xl border-2 border-yellow-300">
-               <h3 className="font-bold text-xl mb-4 text-amber-800">📊 General Formulas:</h3>
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                 <div className="bg-white p-4 rounded-lg border-l-4 border-blue-500">
-                   <h4 className="font-bold text-blue-700 mb-2">Same Direction (Catch-up):</h4>
-                   <div className="font-mono text-sm">
-                     <p>t = (slower_speed × head_start) / (faster_speed - slower_speed)</p>
-                     <p className="mt-2 text-blue-600">When: faster train catches slower train</p>
-                   </div>
-                 </div>
-                 <div className="bg-white p-4 rounded-lg border-l-4 border-purple-500">
-                   <h4 className="font-bold text-purple-700 mb-2">Opposite Direction (Meeting):</h4>
-                   <div className="font-mono text-sm">
-                     <p>t = initial_separation / (speed1 + speed2)</p>
-                     <p className="mt-2 text-purple-600">When: trains approach each other</p>
-                   </div>
-                 </div>
-               </div>
-             </div>
-
-             {/* Key Concepts */}
-             <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl border-2 border-green-300">
-               <h3 className="font-bold text-xl mb-4 text-green-800">🧠 Key Mathematical Concepts:</h3>
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                 <ul className="space-y-3 text-green-700">
-                   <li className="flex items-start gap-2">
-                     <span className="text-green-500 font-bold">•</span>
-                     <span><strong>Distance = Speed × Time</strong> (fundamental equation)</span>
-                   </li>
-                   <li className="flex items-start gap-2">
-                     <span className="text-green-500 font-bold">•</span>
-                     <span><strong>Same direction:</strong> Use relative speed (faster - slower)</span>
-                   </li>
-                   <li className="flex items-start gap-2">
-                     <span className="text-green-500 font-bold">•</span>
-                     <span><strong>Opposite directions:</strong> Add speeds together</span>
-                   </li>
-                 </ul>
-                 <ul className="space-y-3 text-green-700">
-                   <li className="flex items-start gap-2">
-                     <span className="text-green-500 font-bold">•</span>
-                     <span><strong>Head start:</strong> Creates initial distance gap</span>
-                   </li>
-                   <li className="flex items-start gap-2">
-                     <span className="text-green-500 font-bold">•</span>
-                     <span><strong>Meeting point:</strong> When distances are equal</span>
-                   </li>
-                   <li className="flex items-start gap-2">
-                     <span className="text-green-500 font-bold">•</span>
-                     <span><strong>Verification:</strong> Check both trains travel same distance</span>
-                   </li>
-                 </ul>
-               </div>
-             </div>
-
-             {/* Practice Problems */}
-             <div className="bg-gradient-to-r from-indigo-50 to-blue-50 p-6 rounded-xl border-2 border-indigo-300">
-               <h3 className="font-bold text-xl mb-4 text-indigo-800">🎯 Try These Practice Problems:</h3>
-               <div className="space-y-4">
-                 <div className="bg-white p-4 rounded-lg border-l-4 border-indigo-500">
-                   <h4 className="font-bold text-indigo-700 mb-2">Problem 1 (Same Direction):</h4>
-                   <p className="text-gray-700">
-                     Train X leaves at 50 mph. Train Y leaves 2 hours later at 70 mph. When does Y catch X?
-                   </p>
-                   <details className="mt-2">
-                     <summary className="cursor-pointer text-indigo-600 hover:text-indigo-800">Show Solution</summary>
-                     <div className="mt-2 p-3 bg-indigo-50 rounded">
-                       <p>t = (50 × 2) ÷ (70 - 50) = 100 ÷ 20 = 5 hours</p>
-                     </div>
-                   </details>
-                 </div>
-                 <div className="bg-white p-4 rounded-lg border-l-4 border-purple-500">
-                   <h4 className="font-bold text-purple-700 mb-2">Problem 2 (Opposite Direction):</h4>
-                   <p className="text-gray-700">
-                     Train P travels at 60 mph for 1.5 hours, then train Q starts toward it at 80 mph. When do they meet?
-                   </p>
-                   <details className="mt-2">
-                     <summary className="cursor-pointer text-purple-600 hover:text-purple-800">Show Solution</summary>
-                     <div className="mt-2 p-3 bg-purple-50 rounded">
-                       <p>Initial separation = 60 × 1.5 = 90 miles</p>
-                       <p>t = 90 ÷ (60 + 80) = 90 ÷ 140 = 0.64 hours</p>
-                     </div>
-                   </details>
-                 </div>
-               </div>
-             </div>
-           </div>
-         )}
-       </div>
-
-       {/* Footer with additional controls */}
-       <div className="bg-white rounded-xl shadow-xl p-6 mt-6 border border-gray-100">
-         <div className="flex flex-wrap items-center justify-between gap-4">
-           <div className="flex items-center gap-4">
-             <button
-               onClick={() => setShowMathTutorial(!showMathTutorial)}
-               className="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
-             >
-               <BookOpen size={16} />
-               {showMathTutorial ? 'Hide' : 'Show'} Tutorial
-             </button>
-             
-             <div className="text-sm text-gray-600">
-               <span className="font-medium">Speed Controls:</span> Use sliders or number inputs to adjust parameters
-             </div>
-           </div>
-           
-           <div className="text-sm text-gray-500">
-             <span className="font-medium">MathCraft Train Motion</span> - Interactive Learning Tool
-           </div>
-         </div>
-       </div>
-     </div>
-   </div>
- );
-};
-
-export default MathCraftTrainApp;
+                      <p className="text-lg"><strong>Step
