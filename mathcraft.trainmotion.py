@@ -105,26 +105,38 @@ const TrainCalculator = () => {
             <li>In <strong>opposite directions</strong>: <em>Add</em> speeds</li>
           </ul>
         </div>
-        <h3 className="text-2xl font-semibold text-purple-800 mb-2">Standard Problem Template</h3>
+        <h3 className="text-2xl font-semibold text-purple-800 mb-2">Same Direction Example</h3>
         <p className="text-gray-700 mb-4">
           Train A leaves a station traveling at 40 mph. Two hours later, Train B leaves the same station traveling at 60 mph. How long will it take Train B to catch up?
         </p>
-        <h4 className="text-xl font-bold mb-2">Step-by-Step Solution</h4>
         <ol className="list-decimal pl-6 text-gray-700 mb-4">
           <li><strong>Define Variables:</strong> Let t = time Train B travels. Train A's time = t + 2</li>
           <li><strong>Equations:</strong> Train A: 40(t + 2), Train B: 60t</li>
           <li><strong>Set equal:</strong> 40(t + 2) = 60t → 40t + 80 = 60t → 80 = 20t → t = 4</li>
           <li><strong>Conclusion:</strong> Train B catches Train A in 4 hours of its own travel time.</li>
         </ol>
-        <h4 className="text-xl font-bold mb-2">General Formula (Same Direction)</h4>
         <p className="font-mono text-gray-800 mb-2">
-          t = (r1 * h) / (r2 - r1)
+          General Formula: t = (r1 * h) / (r2 - r1)
         </p>
         <h4 className="text-xl font-bold mb-2">Practice Problem</h4>
         <p className="text-gray-700">
           Train A leaves at 50 mph. Train B leaves 3 hours later at 65 mph. <br/>
           t = (50 * 3) / (65 - 50) = 150 / 15 = 10 <br/>
           <strong>Answer:</strong> Train B catches Train A after 10 hours of its own travel, or 13 hours after Train A started.
+        </p>
+
+        <h3 className="text-2xl font-semibold text-purple-800 mt-8 mb-2">Opposite Direction Example</h3>
+        <p className="text-gray-700 mb-4">
+          Train A leaves a station heading east at 40 mph. Train B leaves another station heading west at 60 mph. If the two stations are 300 miles apart, how long will it take for the trains to meet?
+        </p>
+        <ol className="list-decimal pl-6 text-gray-700 mb-4">
+          <li><strong>Define Variables:</strong> Distance = 300 miles, Speeds: 40 mph and 60 mph</li>
+          <li><strong>Add speeds:</strong> 40 + 60 = 100 mph</li>
+          <li><strong>Solve:</strong> t = 300 / 100 = 3 hours</li>
+          <li><strong>Conclusion:</strong> The trains meet after 3 hours.</li>
+        </ol>
+        <p className="font-mono text-gray-800 mb-2">
+          General Formula: t = d / (r1 + r2)
         </p>
       </div>
 
