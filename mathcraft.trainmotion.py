@@ -94,32 +94,22 @@ const TrainCalculator = () => {
 
   const { trainAPos, trainBPos, maxDistance, trainADistance, trainBDistance } = getTrainPositions();
 
-  // Jet Train Toggle Button Component
+  // Simple Jet Train Toggle Button
   const JetTrainToggle = ({ type, isActive, onClick, scenario }) => {
+    const baseClasses = "relative cursor-pointer transform transition-all duration-500 p-8 rounded-3xl border-4";
+    const activeClasses = isActive 
+      ? "border-blue-500 bg-blue-50 shadow-2xl scale-105" 
+      : "border-gray-300 bg-white hover:border-blue-300 shadow-lg";
+    
     return (
-      <div 
-        className={`relative cursor-pointer transform transition-all duration-500 hover:scale-105 p-8 rounded-3xl border-4 ${
-          isActive 
-            ? 'border-blue-500 bg-blue-50 shadow-2xl scale-105' 
-            : 'border-gray-300 bg-white hover:border-blue-300 shadow-lg'
-        }`}
-        onClick={onClick}
-      >
-        {/* Glow effect when active */}
-        {isActive && (
-          <div className="absolute inset-0 bg-blue-400 rounded-3xl blur-xl opacity-30"></div>
-        )}
-        
+      <div className={`${baseClasses} ${activeClasses}`} onClick={onClick}>
         {/* Jet Train Body */}
         <div className="relative flex items-center justify-center">
-          <div className={`relative w-40 h-20 rounded-2xl shadow-xl border-4 transition-all duration-300 ${
+          <div className={`relative w-40 h-20 rounded-2xl shadow-xl border-4 ${
             type === 'hyperloop' 
               ? 'bg-gradient-to-r from-blue-200 to-blue-400 border-blue-500' 
               : 'bg-gradient-to-r from-purple-200 to-purple-400 border-purple-500'
           }`}>
-            
-            {/* Futuristic nose */}
-            <div className="absolute -left-6 top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-10 border-b-10 border-r-12 border-transparent border-r-blue-300"></div>
             
             {/* Train Label */}
             <div className="absolute inset-0 flex items-center justify-center">
@@ -130,9 +120,11 @@ const TrainCalculator = () => {
             
             {/* Windows */}
             <div className="absolute top-4 left-6 right-6 flex justify-between">
-              {[...Array(5)].map((_, i) => (
-                <div key={i} className="w-5 h-4 bg-white rounded-lg opacity-80"></div>
-              ))}
+              <div className="w-5 h-4 bg-white rounded-lg opacity-80"></div>
+              <div className="w-5 h-4 bg-white rounded-lg opacity-80"></div>
+              <div className="w-5 h-4 bg-white rounded-lg opacity-80"></div>
+              <div className="w-5 h-4 bg-white rounded-lg opacity-80"></div>
+              <div className="w-5 h-4 bg-white rounded-lg opacity-80"></div>
             </div>
             
             {/* Jet exhaust when active */}
@@ -149,9 +141,10 @@ const TrainCalculator = () => {
             
             {/* Magnetic levitation indicators */}
             <div className="absolute -bottom-3 left-8 right-8 flex justify-between">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="w-8 h-3 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full animate-pulse"></div>
-              ))}
+              <div className="w-8 h-3 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full animate-pulse"></div>
+              <div className="w-8 h-3 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full animate-pulse"></div>
+              <div className="w-8 h-3 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full animate-pulse"></div>
+              <div className="w-8 h-3 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full animate-pulse"></div>
             </div>
           </div>
         </div>
@@ -174,24 +167,18 @@ const TrainCalculator = () => {
     );
   };
 
-  // Animated train for the track
+  // Simple animated train
   const AnimatedTrain = ({ type, direction, speed, distance, label }) => {
+    const trainClasses = `relative w-20 h-10 rounded-lg shadow-lg border-2 ${
+      type === 'hyperloop' 
+        ? 'bg-gradient-to-r from-blue-400 to-blue-600 border-blue-700' 
+        : 'bg-gradient-to-r from-purple-400 to-purple-600 border-purple-700'
+    }`;
+
     return (
       <div className={`flex items-center ${direction === 'left' ? 'flex-row-reverse' : ''}`}>
         <div className="relative">
-          <div className={`relative w-20 h-10 rounded-lg shadow-lg border-2 ${
-            type === 'hyperloop' 
-              ? 'bg-gradient-to-r from-blue-400 to-blue-600 border-blue-700' 
-              : 'bg-gradient-to-r from-purple-400 to-purple-600 border-purple-700'
-          }`}>
-            
-            {/* Nose */}
-            <div className={`absolute ${direction === 'left' ? 'right-full' : 'left-full'} top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-5 border-b-5 ${
-              direction === 'left' 
-                ? 'border-r-8 border-r-blue-500' 
-                : 'border-l-8 border-l-blue-500'
-            } border-transparent`}></div>
-            
+          <div className={trainClasses}>
             {/* Label */}
             <div className="absolute inset-0 flex items-center justify-center">
               <span className="font-bold text-lg text-white">{label}</span>
@@ -207,12 +194,6 @@ const TrainCalculator = () => {
                 </div>
               </div>
             )}
-            
-            {/* Levitation */}
-            <div className="absolute -bottom-1 left-2 right-2 flex justify-between">
-              <div className="w-2 h-1 bg-cyan-400 rounded-full animate-pulse"></div>
-              <div className="w-2 h-1 bg-cyan-400 rounded-full animate-pulse"></div>
-            </div>
           </div>
           
           <div className={`${direction === 'left' ? 'mr-2' : 'ml-2'} bg-white p-2 rounded-lg shadow-md border text-center`}>
@@ -363,12 +344,12 @@ const TrainCalculator = () => {
 
               {/* Distance markers */}
               <div className="flex justify-between text-sm text-gray-700 mb-6">
-                {[...Array(6)].map((_, i) => (
-                  <div key={i} className="text-center">
-                    <div className="w-px h-4 bg-gray-400 mx-auto mb-1"></div>
-                    <span>{Math.round((i * maxDistance) / 5)} mi</span>
-                  </div>
-                ))}
+                <span>0 mi</span>
+                <span>{Math.round(maxDistance * 0.2)} mi</span>
+                <span>{Math.round(maxDistance * 0.4)} mi</span>
+                <span>{Math.round(maxDistance * 0.6)} mi</span>
+                <span>{Math.round(maxDistance * 0.8)} mi</span>
+                <span>{Math.round(maxDistance)} mi</span>
               </div>
 
               {/* Trains */}
@@ -516,6 +497,16 @@ const TrainCalculator = () => {
                   </div>
                 </div>
               )}
+
+              <div className="bg-yellow-50 p-6 rounded-xl">
+                <h3 className="font-bold text-xl mb-4">🧠 Key Concepts:</h3>
+                <ul className="space-y-2">
+                  <li>• <strong>Same direction:</strong> Subtract speeds (relative speed)</li>
+                  <li>• <strong>Opposite directions:</strong> Add speeds (combined approach)</li>
+                  <li>• <strong>Distance = Speed × Time</strong> for each train</li>
+                  <li>• Meeting occurs when distances are equal</li>
+                </ul>
+              </div>
             </div>
           )}
         </div>
