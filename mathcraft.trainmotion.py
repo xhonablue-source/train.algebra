@@ -81,3 +81,25 @@ with st.expander("📘 Learn the Math"):
     - d = initial distance = `r1 * h`
     """)
 
+# Build Your Own Problem Section
+st.markdown("---")
+st.header("🛠️ Build Your Own Problem")
+
+with st.form("custom_problem"):
+    custom_scenario = st.radio("Scenario Type:", ["Same Direction", "Opposite Direction"], key="custom_scenario")
+    custom_r1 = st.number_input("Train A Speed (mph)", min_value=1, max_value=500, value=30, key="r1")
+    custom_r2 = st.number_input("Train B Speed (mph)", min_value=1, max_value=500, value=60, key="r2")
+    custom_headstart = st.number_input("Head Start (hours)", min_value=0.0, max_value=24.0, value=2.0, step=0.5, key="headstart")
+    submitted = st.form_submit_button("Solve My Problem")
+
+    if submitted:
+        if custom_scenario == "Same Direction":
+            if custom_r2 <= custom_r1:
+                st.error("Train B must be faster than Train A to catch up.")
+            else:
+                t = (custom_r1 * custom_headstart) / (custom_r2 - custom_r1)
+                st.success(f"📍 Trains will meet after {t:.2f} hours (Same Direction).")
+        else:
+            d = custom_r1 * custom_headstart
+            t = d / (custom_r1 + custom_r2)
+            st.success(f"📍 Trains will meet after {t:.2f} hours (Opposite Direction).")
