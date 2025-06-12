@@ -4,7 +4,15 @@ import plotly.graph_objects as go
 
 # Set up the page
 st.set_page_config(page_title="Train Motion App", layout="centered")
-st.title("🚆 Train Motion Simulator")
+
+# Header with logo and author
+st.markdown("""
+<div style='text-align: center; padding: 1rem 0;'>
+    <h1 style='font-size: 3em; color: #1f77b4;'>🚂 MathCraft: Jet Train Motion</h1>
+    <p style='font-size: 1.5em; font-weight: bold;'>by Xavier Honablue, M.Ed.</p>
+    <p style='color: gray; font-size: 0.9em;'>All rights reserved. | Inspired by earlier MathCraft projects like Algebra Rules & Fraction Adventures</p>
+</div>
+""", unsafe_allow_html=True)
 
 # Lead with a sample word problem
 with st.container():
