@@ -16,7 +16,7 @@ const MathCraftTrainApp = () => {
   // Calculate meeting time and position
   const calculateMeeting = () => {
     if (scenario === 'same-direction') {
-      if (trainBSpeed <= trainASpeed) return null; // B must be faster to catch up
+      if (trainBSpeed <= trainASpeed) return null;
       const meetingTime = (trainASpeed * headStart) / (trainBSpeed - trainASpeed);
       const meetingDistance = trainBSpeed * meetingTime;
       return { 
@@ -26,7 +26,6 @@ const MathCraftTrainApp = () => {
         trainBDistance: trainBSpeed * meetingTime 
       };
     } else {
-      // Opposite directions
       const combinedSpeed = trainASpeed + trainBSpeed;
       const initialDistance = trainASpeed * headStart;
       const meetingTime = initialDistance / combinedSpeed;
@@ -224,7 +223,7 @@ const MathCraftTrainApp = () => {
                 max="100"
                 value={trainASpeed}
                 onChange={(e) => setTrainASpeed(Number(e.target.value))}
-                className="w-full h-3 bg-red-200 rounded-lg appearance-none cursor-pointer slider-red"
+                className="w-full h-3 bg-red-200 rounded-lg appearance-none cursor-pointer"
               />
               <input
                 type="number"
@@ -245,7 +244,7 @@ const MathCraftTrainApp = () => {
                 max="100"
                 value={trainBSpeed}
                 onChange={(e) => setTrainBSpeed(Number(e.target.value))}
-                className="w-full h-3 bg-blue-200 rounded-lg appearance-none cursor-pointer slider-blue"
+                className="w-full h-3 bg-blue-200 rounded-lg appearance-none cursor-pointer"
               />
               <input
                 type="number"
@@ -267,7 +266,7 @@ const MathCraftTrainApp = () => {
                 step="0.5"
                 value={headStart}
                 onChange={(e) => setHeadStart(Number(e.target.value))}
-                className="w-full h-3 bg-green-200 rounded-lg appearance-none cursor-pointer slider-green"
+                className="w-full h-3 bg-green-200 rounded-lg appearance-none cursor-pointer"
               />
               <input
                 type="number"
@@ -553,7 +552,7 @@ const MathCraftTrainApp = () => {
                       </div>
                     </div>
                     <div className="bg-white p-4 rounded-lg shadow-sm">
-                      <p className="text-lg"><strong>Step 3:</strong> Set distances equal (they meet when distances are equal):</p>
+                      <p className="text-lg"><strong>Step 3:</strong> Set distances equal:</p>
                       <div className="ml-4 mt-2 font-mono text-blue-700 text-xl">
                         {trainASpeed}(t + {headStart}) = {trainBSpeed}t
                       </div>
@@ -562,19 +561,163 @@ const MathCraftTrainApp = () => {
                       <p className="text-lg"><strong>Step 4:</strong> Solve for t:</p>
                       <div className="ml-4 mt-2 font-mono text-blue-700">
                         <p>{trainASpeed}t + {trainASpeed * headStart} = {trainBSpeed}t</p>
-                        <p>{trainASpeed * headStart} = {trainBSpeed}t - {trainASpeed}t</p>
                         <p>{trainASpeed * headStart} = {trainBSpeed - trainASpeed}t</p>
-                        <p className="text-xl font-bold">t = {trainASpeed * headStart} ÷ {trainBSpeed - trainASpeed} = {meeting.time.toFixed(2)} hours</p>
+                        <p className="text-xl font-bold">t = {meeting.time.toFixed(2)} hours</p>
                       </div>
                     </div>
                     <div className="bg-green-100 p-4 rounded-lg border-2 border-green-300">
                       <p className="text-lg font-bold text-green-800">
                         ✅ Answer: Train B catches Train A after <span className="text-2xl">{meeting.time.toFixed(1)} hours</span>
                       </p>
-                      <p className="text-green-700">Meeting distance: {meeting.distance.toFixed(1)} miles from start</p>
                     </div>
                   </div>
                 </div>
               ) : (
                 <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl border-2 border-purple-200">
-                  <h3 className="font
+                  <h3 className="font-bold text-xl mb-4 text-purple-800">🎯 Opposite Direction Solution:</h3>
+                  <div className="space-y-4">
+                    <div className="bg-white p-4 rounded-lg shadow-sm">
+                      <p className="text-lg"><strong>Step 1:</strong> Initial separation = {trainASpeed} × {headStart} = {trainASpeed * headStart} miles</p>
+                    </div>
+                    <div className="bg-white p-4 rounded-lg shadow-sm">
+                      <p className="text-lg"><strong>Step 2:</strong> Combined approach speed = {trainASpeed} + {train
+
+BSpeed} = {trainASpeed + trainBSpeed} mph</p>
+                   </div>
+                   <div className="bg-white p-4 rounded-lg shadow-sm">
+                     <p className="text-lg"><strong>Step 3:</strong> Meeting time calculation:</p>
+                     <div className="ml-4 mt-2 font-mono text-purple-700">
+                       <p>Time = Distance ÷ Combined Speed</p>
+                       <p>Time = {trainASpeed * headStart} ÷ {trainASpeed + trainBSpeed}</p>
+                       <p className="text-xl font-bold">Time = {meeting.time.toFixed(2)} hours</p>
+                     </div>
+                   </div>
+                   <div className="bg-green-100 p-4 rounded-lg border-2 border-green-300">
+                     <p className="text-lg font-bold text-green-800">
+                       ✅ Answer: Trains meet after <span className="text-2xl">{meeting.time.toFixed(1)} hours</span>
+                     </p>
+                     <p className="text-green-700">Meeting distance: {meeting.distance.toFixed(1)} miles from Train A's start</p>
+                   </div>
+                 </div>
+               </div>
+             )}
+
+             {/* General Formula Section */}
+             <div className="bg-gradient-to-r from-yellow-50 to-amber-50 p-6 rounded-xl border-2 border-yellow-300">
+               <h3 className="font-bold text-xl mb-4 text-amber-800">📊 General Formulas:</h3>
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                 <div className="bg-white p-4 rounded-lg border-l-4 border-blue-500">
+                   <h4 className="font-bold text-blue-700 mb-2">Same Direction (Catch-up):</h4>
+                   <div className="font-mono text-sm">
+                     <p>t = (slower_speed × head_start) / (faster_speed - slower_speed)</p>
+                     <p className="mt-2 text-blue-600">When: faster train catches slower train</p>
+                   </div>
+                 </div>
+                 <div className="bg-white p-4 rounded-lg border-l-4 border-purple-500">
+                   <h4 className="font-bold text-purple-700 mb-2">Opposite Direction (Meeting):</h4>
+                   <div className="font-mono text-sm">
+                     <p>t = initial_separation / (speed1 + speed2)</p>
+                     <p className="mt-2 text-purple-600">When: trains approach each other</p>
+                   </div>
+                 </div>
+               </div>
+             </div>
+
+             {/* Key Concepts */}
+             <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl border-2 border-green-300">
+               <h3 className="font-bold text-xl mb-4 text-green-800">🧠 Key Mathematical Concepts:</h3>
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                 <ul className="space-y-3 text-green-700">
+                   <li className="flex items-start gap-2">
+                     <span className="text-green-500 font-bold">•</span>
+                     <span><strong>Distance = Speed × Time</strong> (fundamental equation)</span>
+                   </li>
+                   <li className="flex items-start gap-2">
+                     <span className="text-green-500 font-bold">•</span>
+                     <span><strong>Same direction:</strong> Use relative speed (faster - slower)</span>
+                   </li>
+                   <li className="flex items-start gap-2">
+                     <span className="text-green-500 font-bold">•</span>
+                     <span><strong>Opposite directions:</strong> Add speeds together</span>
+                   </li>
+                 </ul>
+                 <ul className="space-y-3 text-green-700">
+                   <li className="flex items-start gap-2">
+                     <span className="text-green-500 font-bold">•</span>
+                     <span><strong>Head start:</strong> Creates initial distance gap</span>
+                   </li>
+                   <li className="flex items-start gap-2">
+                     <span className="text-green-500 font-bold">•</span>
+                     <span><strong>Meeting point:</strong> When distances are equal</span>
+                   </li>
+                   <li className="flex items-start gap-2">
+                     <span className="text-green-500 font-bold">•</span>
+                     <span><strong>Verification:</strong> Check both trains travel same distance</span>
+                   </li>
+                 </ul>
+               </div>
+             </div>
+
+             {/* Practice Problems */}
+             <div className="bg-gradient-to-r from-indigo-50 to-blue-50 p-6 rounded-xl border-2 border-indigo-300">
+               <h3 className="font-bold text-xl mb-4 text-indigo-800">🎯 Try These Practice Problems:</h3>
+               <div className="space-y-4">
+                 <div className="bg-white p-4 rounded-lg border-l-4 border-indigo-500">
+                   <h4 className="font-bold text-indigo-700 mb-2">Problem 1 (Same Direction):</h4>
+                   <p className="text-gray-700">
+                     Train X leaves at 50 mph. Train Y leaves 2 hours later at 70 mph. When does Y catch X?
+                   </p>
+                   <details className="mt-2">
+                     <summary className="cursor-pointer text-indigo-600 hover:text-indigo-800">Show Solution</summary>
+                     <div className="mt-2 p-3 bg-indigo-50 rounded">
+                       <p>t = (50 × 2) ÷ (70 - 50) = 100 ÷ 20 = 5 hours</p>
+                     </div>
+                   </details>
+                 </div>
+                 <div className="bg-white p-4 rounded-lg border-l-4 border-purple-500">
+                   <h4 className="font-bold text-purple-700 mb-2">Problem 2 (Opposite Direction):</h4>
+                   <p className="text-gray-700">
+                     Train P travels at 60 mph for 1.5 hours, then train Q starts toward it at 80 mph. When do they meet?
+                   </p>
+                   <details className="mt-2">
+                     <summary className="cursor-pointer text-purple-600 hover:text-purple-800">Show Solution</summary>
+                     <div className="mt-2 p-3 bg-purple-50 rounded">
+                       <p>Initial separation = 60 × 1.5 = 90 miles</p>
+                       <p>t = 90 ÷ (60 + 80) = 90 ÷ 140 = 0.64 hours</p>
+                     </div>
+                   </details>
+                 </div>
+               </div>
+             </div>
+           </div>
+         )}
+       </div>
+
+       {/* Footer with additional controls */}
+       <div className="bg-white rounded-xl shadow-xl p-6 mt-6 border border-gray-100">
+         <div className="flex flex-wrap items-center justify-between gap-4">
+           <div className="flex items-center gap-4">
+             <button
+               onClick={() => setShowMathTutorial(!showMathTutorial)}
+               className="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
+             >
+               <BookOpen size={16} />
+               {showMathTutorial ? 'Hide' : 'Show'} Tutorial
+             </button>
+             
+             <div className="text-sm text-gray-600">
+               <span className="font-medium">Speed Controls:</span> Use sliders or number inputs to adjust parameters
+             </div>
+           </div>
+           
+           <div className="text-sm text-gray-500">
+             <span className="font-medium">MathCraft Train Motion</span> - Interactive Learning Tool
+           </div>
+         </div>
+       </div>
+     </div>
+   </div>
+ );
+};
+
+export default MathCraftTrainApp;
