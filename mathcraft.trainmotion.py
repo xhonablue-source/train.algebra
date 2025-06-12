@@ -100,7 +100,7 @@ const TrainCalculator = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-5xl font-bold text-blue-600 mb-4">
-            🚀 MathCraft: Jet Train Motion
+            MathCraft: Jet Train Motion
           </h1>
           <p className="text-2xl font-semibold text-gray-700 mb-2">by Xavier Honablue M.Ed</p>
           <p className="text-xl text-gray-600">Future Transportation Mathematics</p>
@@ -109,7 +109,7 @@ const TrainCalculator = () => {
         {/* Interactive Train Toggle Buttons */}
         <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
           <h2 className="text-3xl font-bold mb-8 text-center">
-            🛸 Click the Jet Trains to Choose Your Scenario!
+            Click the Jet Trains to Choose Your Scenario!
           </h2>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -123,13 +123,13 @@ const TrainCalculator = () => {
               onClick={() => setScenario('same-direction')}
             >
               <div className="text-center">
-                <div className="text-6xl mb-4">🚀➡️🚀</div>
+                <div className="text-6xl mb-4">🚂→🚂</div>
                 <h3 className="text-2xl font-bold text-blue-800 mb-2">Same Direction</h3>
                 <p className="text-gray-600 mb-2">Faster train catches slower train</p>
-                <p className="text-blue-600 font-mono">→ → (Subtract speeds)</p>
+                <p className="text-blue-600 font-mono">Subtract speeds</p>
                 {scenario === 'same-direction' && (
                   <div className="mt-4 text-orange-500 animate-pulse">
-                    🔥 SELECTED 🔥
+                    ⭐ SELECTED ⭐
                   </div>
                 )}
               </div>
@@ -145,18 +145,18 @@ const TrainCalculator = () => {
               onClick={() => setScenario('opposite-direction')}
             >
               <div className="text-center">
-                <div className="text-6xl mb-4">🚀➡️⬅️🚀</div>
+                <div className="text-6xl mb-4">🚂→←🚂</div>
                 <h3 className="text-2xl font-bold text-purple-800 mb-2">Opposite Directions</h3>
                 <p className="text-gray-600 mb-2">Trains move toward each other</p>
-                <p className="text-purple-600 font-mono">→ ← (Add speeds)</p>
+                <p className="text-purple-600 font-mono">Add speeds</p>
                 {scenario === 'opposite-direction' && (
                   <div className="mt-4 text-orange-500 animate-pulse">
-                    🔥 SELECTED 🔥
+                    ⭐ SELECTED ⭐
                   </div>
                 )}
                 {scenario === 'opposite-direction' && (
                   <div className="mt-3 text-sm text-purple-600 italic bg-purple-100 p-3 rounded">
-                    💡 Fun Fact: Moving toward each other = ADD speeds!
+                    Fun Fact: Moving toward each other = ADD speeds!
                   </div>
                 )}
               </div>
@@ -167,12 +167,12 @@ const TrainCalculator = () => {
         {/* Controls */}
         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
           <h2 className="text-2xl font-bold mb-6 text-gray-800">
-            🚀 Jet Train Parameters
+            Jet Train Parameters
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-3">
               <label className="block text-sm font-bold text-blue-600 mb-2">
-                🚀 Hyperloop A Speed: {trainASpeed} mph
+                Hyperloop A Speed: {trainASpeed} mph
               </label>
               <input
                 type="range"
@@ -191,7 +191,7 @@ const TrainCalculator = () => {
             </div>
             <div className="space-y-3">
               <label className="block text-sm font-bold text-purple-600 mb-2">
-                ⚡ Jet Train B Speed: {trainBSpeed} mph
+                Jet Train B Speed: {trainBSpeed} mph
               </label>
               <input
                 type="range"
@@ -210,7 +210,7 @@ const TrainCalculator = () => {
             </div>
             <div className="space-y-3">
               <label className="block text-sm font-bold text-pink-600 mb-2">
-                ⏰ Head Start: {headStart} hours
+                Head Start: {headStart} hours
               </label>
               <input
                 type="range"
@@ -234,21 +234,21 @@ const TrainCalculator = () => {
         {/* Animation */}
         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-800">🎬 Live Animation</h2>
+            <h2 className="text-2xl font-bold text-gray-800">Live Animation</h2>
             <div className="flex gap-3">
               <button
                 onClick={() => setIsAnimating(!isAnimating)}
                 className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-lg"
               >
                 {isAnimating ? <Pause size={24} /> : <Play size={24} />}
-                {isAnimating ? '🛑 Stop' : '🚀 Launch'}
+                {isAnimating ? 'Stop' : 'Launch'}
               </button>
               <button
                 onClick={resetAnimation}
                 className="flex items-center gap-2 px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 text-lg"
               >
                 <RotateCcw size={24} />
-                🔄 Reset
+                Reset
               </button>
             </div>
           </div>
@@ -276,7 +276,7 @@ const TrainCalculator = () => {
                   style={{ left: `${trainAPos}px`, top: '-40px' }}
                 >
                   <div className="flex items-center">
-                    <div className="text-4xl">🚀</div>
+                    <div className="text-4xl">🚂</div>
                     <div className="ml-2 bg-white p-2 rounded shadow">
                       <div className="font-bold text-blue-600">Train A</div>
                       <div className="text-xs">{trainASpeed} mph</div>
@@ -295,7 +295,7 @@ const TrainCalculator = () => {
                   }}
                 >
                   <div className="flex items-center">
-                    <div className="text-4xl">⚡</div>
+                    <div className="text-4xl">🚄</div>
                     <div className={`ml-2 bg-white p-2 rounded shadow ${scenario === 'opposite-direction' ? 'transform scale-x-[-1]' : ''}`}>
                       <div className="font-bold text-purple-600">Train B</div>
                       <div className="text-xs">{trainBSpeed} mph</div>
@@ -349,34 +349,34 @@ const TrainCalculator = () => {
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
               <Calculator className="text-indigo-600" />
-              🧮 Mathematical Solution
+              Mathematical Solution
             </h2>
             <button
               onClick={() => setShowCalculations(!showCalculations)}
               className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-lg"
             >
               <Calculator size={20} />
-              {showCalculations ? '🙈 Hide' : '🤓 Show'} Calculations
+              {showCalculations ? 'Hide' : 'Show'} Calculations
             </button>
           </div>
 
           {showCalculations && meeting && (
             <div className="space-y-6">
               <div className="bg-gray-50 p-6 rounded">
-                <h3 className="font-bold text-xl mb-4">📋 Problem Setup:</h3>
+                <h3 className="font-bold text-xl mb-4">Problem Setup:</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="bg-blue-50 p-4 rounded border-l-4 border-blue-500">
-                    <strong>🚀 Hyperloop A:</strong> {trainASpeed} mph, {headStart}-hour head start
+                    <strong>Hyperloop A:</strong> {trainASpeed} mph, {headStart}-hour head start
                   </div>
                   <div className="bg-purple-50 p-4 rounded border-l-4 border-purple-500">
-                    <strong>⚡ Jet Train B:</strong> {trainBSpeed} mph, {scenario === 'same-direction' ? 'same direction' : 'opposite direction'}
+                    <strong>Jet Train B:</strong> {trainBSpeed} mph, {scenario === 'same-direction' ? 'same direction' : 'opposite direction'}
                   </div>
                 </div>
               </div>
 
               {scenario === 'same-direction' ? (
                 <div className="bg-blue-50 p-6 rounded">
-                  <h3 className="font-bold text-xl mb-4">🎯 Same Direction Solution:</h3>
+                  <h3 className="font-bold text-xl mb-4">Same Direction Solution:</h3>
                   <div className="space-y-4">
                     <div className="bg-white p-4 rounded">
                       <p><strong>Step 1:</strong> Let t = time Train B travels</p>
@@ -394,14 +394,14 @@ const TrainCalculator = () => {
                     </div>
                     <div className="bg-green-100 p-4 rounded">
                       <p className="font-bold text-green-800">
-                        ✅ Answer: Train B catches Train A after {meeting.time.toFixed(1)} hours
+                        Answer: Train B catches Train A after {meeting.time.toFixed(1)} hours
                       </p>
                     </div>
                   </div>
                 </div>
               ) : (
                 <div className="bg-purple-50 p-6 rounded">
-                  <h3 className="font-bold text-xl mb-4">🎯 Opposite Direction Solution:</h3>
+                  <h3 className="font-bold text-xl mb-4">Opposite Direction Solution:</h3>
                   <div className="space-y-4">
                     <div className="bg-white p-4 rounded">
                       <p><strong>Step 1:</strong> Initial separation = {trainASpeed * headStart} miles</p>
@@ -414,7 +414,7 @@ const TrainCalculator = () => {
                     </div>
                     <div className="bg-green-100 p-4 rounded">
                       <p className="font-bold text-green-800">
-                        ✅ Answer: Trains meet after {meeting.time.toFixed(1)} hours
+                        Answer: Trains meet after {meeting.time.toFixed(1)} hours
                       </p>
                     </div>
                   </div>
