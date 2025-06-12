@@ -6,6 +6,17 @@ import plotly.graph_objects as go
 st.set_page_config(page_title="Train Motion App", layout="centered")
 st.title("🚆 Train Motion Simulator")
 
+# Lead with a sample word problem
+with st.container():
+    st.subheader("🎯 Sample Problem")
+    st.markdown("""
+    **Train A leaves a station at 40 mph. Two hours later, Train B leaves the same station at 60 mph.**
+    
+    **Question:** When will Train B catch up with Train A?
+
+    This is a classic **same-direction relative motion** problem. You'll see it solved below with interactive controls and animation.
+    """)
+
 # User inputs
 scenario = st.radio("Choose the scenario:", ["Same Direction", "Opposite Direction"])
 trainA_speed = st.slider("Train A Speed (mph)", 20, 200, 40)
